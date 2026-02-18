@@ -22,10 +22,11 @@ export interface OfferLetterData {
   signerName: string;
   signerTitle: string;
   signerSignature: string | null;
-  template: 'classic' | 'modern' | 'creative' | 'regal' | 'vibrant' | 'formal';
+  template: 'classic' | 'modern' | 'creative' | 'regal' | 'vibrant' | 'formal' | 'tech' | 'corporate';
   fontFamily: string;
   headingColor: string;
   bodyColor: string;
   accentColor: string;
   logoAlignment: 'left' | 'right';
+  elementOrder: string[];
 }

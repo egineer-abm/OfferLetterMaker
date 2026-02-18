@@ -1,10 +1,8 @@
-
 <div class="p-6 h-full flex flex-col">
   <div class="border-b border-gray-200 mb-6">
     <nav class="-mb-px flex space-x-6" aria-label="Tabs">
       <button (click)="activeTab.set('details')" [class.border-slate-500]="activeTab() === 'details'" [class.text-slate-600]="activeTab() === 'details'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Details</button>
-      <button (click)="activeTab.set('style')" [class.border-slate-500]="activeTab() === 'style'" [class.text-slate-600]="activeTab() === 'style'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Style</button>
-      <button (click)="activeTab.set('customize')" [class.border-slate-500]="activeTab() === 'customize'" [class.text-slate-600]="activeTab() === 'customize'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Customize</button>
+      <button (click)="activeTab.set('style')" [class.border-slate-500]="activeTab() === 'style'" [class.text-slate-600]="activeTab() === 'style'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Style & Layout</button>
       <button (click)="activeTab.set('ai')" [class.border-slate-500]="activeTab() === 'ai'" [class.text-slate-600]="activeTab() === 'ai'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">AI Assistant</button>
       <button (click)="activeTab.set('export')" [class.border-slate-500]="activeTab() === 'export'" [class.text-slate-600]="activeTab() === 'export'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Export</button>
     </nav>
@@ -103,6 +101,14 @@
                 <label for="startDate" class="block text-sm font-medium text-gray-700">Start Date</label>
                 <input type="date" id="startDate" formControlName="startDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
               </div>
+              <div class="sm:col-span-3">
+                <label for="acceptanceDeadline" class="block text-sm font-medium text-gray-700">Acceptance Deadline</label>
+                <input type="date" id="acceptanceDeadline" formControlName="acceptanceDeadline" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+              </div>
+              <div class="sm:col-span-3">
+                <label for="managerName" class="block text-sm font-medium text-gray-700">Reporting Manager</label>
+                <input type="text" id="managerName" formControlName="managerName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+              </div>
               <div class="sm:col-span-6">
                 <label class="block text-sm font-medium text-gray-700">Compensation Type</label>
                 <fieldset class="mt-2">
@@ -143,12 +149,35 @@
 
           <!-- Letter Body -->
           <section>
-             <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Letter Content</h3>
-             <div>
-                <label for="body" class="block text-sm font-medium text-gray-700">Body</label>
-                <textarea id="body" formControlName="body" rows="12" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm"></textarea>
-                <p class="mt-2 text-xs text-gray-500">Use placeholders like <code>&lbrace;jobTitle&rbrace;</code>, <code>&lbrace;compensationDetails&rbrace;</code>, etc.</p>
-             </div>
+            <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Letter Content</h3>
+            <div>
+              <label for="body-editor" class="block text-sm font-medium text-gray-700 mb-2">Body</label>
+              <!-- Rich Text Editor Toolbar -->
+              <div class="flex items-center space-x-1 p-2 bg-gray-100 rounded-t-md border border-gray-300 border-b-0">
+                <button type="button" (click)="formatDoc('bold')" title="Bold" class="p-2 rounded hover:bg-gray-200"><svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h4a4 4 0 0 0 0-8H4v3m0 5h5a4 4 0 0 1 0 8H4v-3" /></svg></button>
+                <button type="button" (click)="formatDoc('italic')" title="Italic" class="p-2 rounded hover:bg-gray-200"><svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7 4h10M7 20h10M12 4s-1.5 16-1.5 16" /></svg></button>
+                <button type="button" (click)="formatDoc('underline')" title="Underline" class="p-2 rounded hover:bg-gray-200"><svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 20h14M5 4v6a7 7 0 0 0 14 0V4" /></svg></button>
+                <div class="w-px h-6 bg-gray-300 mx-1"></div>
+                <button type="button" (click)="formatDoc('insertUnorderedList')" title="Bulleted List" class="p-2 rounded hover:bg-gray-200"><svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" /></svg></button>
+                <button type="button" (click)="formatDoc('insertOrderedList')" title="Numbered List" class="p-2 rounded hover:bg-gray-200"><svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7M3 6h0m0 6h0m0 6h0" /></svg></button>
+                <div class="w-px h-6 bg-gray-300 mx-1"></div>
+                <button type="button" (click)="rewriteSelection()" [disabled]="isRewriting()" title="Rewrite with AI" class="p-2 rounded hover:bg-gray-200 flex items-center disabled:opacity-50 disabled:cursor-not-allowed">
+                  @if (isRewriting()) {
+                    <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                  } @else {
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 15l-1.813-1.813a2.25 2.25 0 1 1 3.183-3.183L12 12l1.187.187a2.25 2.25 0 1 1 3.183 3.183L15 15l-.813.904L12 18l-2.187-2.096Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                  }
+                </button>
+              </div>
+              <!-- Rich Text Editor Content Area -->
+              <div #editorDiv
+                id="body-editor"
+                contenteditable="true"
+                (input)="onBodyInput($event)"
+                class="p-3 min-h-[20rem] overflow-y-auto rounded-b-md border border-t-0 border-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-500 whitespace-pre-wrap">
+              </div>
+              <p class="mt-2 text-xs text-gray-500">Use placeholders like <code>{{ '{' }}jobTitle{{ '}' }}</code>, <code>{{ '{' }}compensationDetails{{ '}' }}</code>, etc.</p>
+            </div>
           </section>
 
           <!-- Signature Details -->
@@ -191,116 +220,142 @@
       }
 
       @if (activeTab() === 'style') {
-        <div class="space-y-6">
-          <h3 class="text-lg font-semibold text-slate-800">Choose a Template</h3>
-          <p class="text-sm text-gray-600">Select a visual style for your offer letter. The preview will update instantly.</p>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-             <label for="template-classic" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'classic'" [class.border-gray-300]="form.get('template')?.value !== 'classic'">
-              <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3">
-                  <div class="w-4/5 h-4/5 bg-white shadow-sm p-2"><div class="w-1/3 h-2 bg-gray-400 rounded-sm mb-2"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-2/3 h-1 bg-gray-300 rounded-sm"></div></div>
-              </div>
-              <h4 class="font-semibold text-slate-800">Classic</h4>
-              <p class="text-xs text-gray-500">A timeless, formal design.</p>
-              <input type="radio" id="template-classic" value="classic" formControlName="template" class="sr-only">
-            </label>
-             <label for="template-modern" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'modern'" [class.border-gray-300]="form.get('template')?.value !== 'modern'">
-              <div class="w-full h-20 bg-blue-100 rounded-md flex items-center justify-center mb-3">
-                 <div class="w-4/5 h-4/5 bg-white shadow-sm p-2 flex"><div class="w-2 h-full bg-blue-800 rounded-sm mr-2"></div><div class="flex-grow"><div class="w-1/3 h-2 bg-blue-800 rounded-sm mb-2"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-2/3 h-1 bg-gray-300 rounded-sm"></div></div></div>
-              </div>
-              <h4 class="font-semibold text-slate-800">Modern</h4>
-              <p class="text-xs text-gray-500">A clean, professional look.</p>
-              <input type="radio" id="template-modern" value="modern" formControlName="template" class="sr-only">
-            </label>
-             <label for="template-creative" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'creative'" [class.border-gray-300]="form.get('template')?.value !== 'creative'">
-              <div class="w-full h-20 bg-gray-300 rounded-md flex items-center justify-center mb-3">
-                 <div class="w-4/5 h-4/5 bg-white shadow-sm p-2"><div class="w-full h-4 bg-gray-800 rounded-sm mb-2"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-2/3 h-1 bg-gray-300 rounded-sm"></div></div>
-              </div>
-              <h4 class="font-semibold text-slate-800">Creative</h4>
-              <p class="text-xs text-gray-500">A bold, stylish statement.</p>
-              <input type="radio" id="template-creative" value="creative" formControlName="template" class="sr-only">
-            </label>
-             <label for="template-regal" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'regal'" [class.border-gray-300]="form.get('template')?.value !== 'regal'">
-              <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3 overflow-hidden">
-                 <div class="w-4/5 h-4/5 bg-white shadow-sm relative"><div class="w-full h-4 bg-blue-800 absolute top-0 left-0 border-b-2 border-yellow-400"></div></div>
-              </div>
-              <h4 class="font-semibold text-slate-800">Regal</h4>
-              <p class="text-xs text-gray-500">An elegant, prestigious look.</p>
-              <input type="radio" id="template-regal" value="regal" formControlName="template" class="sr-only">
-            </label>
-            <label for="template-vibrant" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'vibrant'" [class.border-gray-300]="form.get('template')?.value !== 'vibrant'">
-              <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3 overflow-hidden">
-                 <div class="w-4/5 h-4/5 bg-white shadow-sm relative"><div class="w-full h-1 bg-green-500 absolute top-0 left-0"></div><div class="w-1 h-full bg-green-500 absolute right-0 top-0"></div></div>
-              </div>
-              <h4 class="font-semibold text-slate-800">Vibrant</h4>
-              <p class="text-xs text-gray-500">A dynamic, modern feel.</p>
-              <input type="radio" id="template-vibrant" value="vibrant" formControlName="template" class="sr-only">
-            </label>
-            <label for="template-formal" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'formal'" [class.border-gray-300]="form.get('template')?.value !== 'formal'">
-              <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3 overflow-hidden">
-                 <div class="w-4/5 h-4/5 bg-white shadow-sm relative p-1">
-                   <div class="w-1/4 h-2 bg-gray-400 absolute top-1 left-1 rounded-sm"></div>
-                   <div class="w-1/4 h-1 bg-gray-400 absolute top-1 right-1 rounded-sm text-right"></div>
-                   <div class="w-full h-1 bg-gray-500 absolute top-4 left-0 right-0 mx-auto"></div>
-                   <div class="w-full h-px bg-gray-300 absolute bottom-3 left-0 right-0 mx-auto"></div>
-                 </div>
-              </div>
-              <h4 class="font-semibold text-slate-800">Formal</h4>
-              <p class="text-xs text-gray-500">A traditional, corporate style.</p>
-              <input type="radio" id="template-formal" value="formal" formControlName="template" class="sr-only">
-            </label>
-          </div>
-        </div>
-      }
+        <div class="space-y-8">
+          <section>
+            <h3 class="text-lg font-semibold text-slate-800">Choose a Template</h3>
+            <p class="text-sm text-gray-600 mt-1">Select a visual style for your offer letter. The preview will update instantly.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+              <label for="template-classic" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'classic'" [class.border-gray-300]="form.get('template')?.value !== 'classic'">
+                <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3">
+                    <div class="w-4/5 h-4/5 bg-white shadow-sm p-2"><div class="w-1/3 h-2 bg-gray-400 rounded-sm mb-2"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-2/3 h-1 bg-gray-300 rounded-sm"></div></div>
+                </div>
+                <h4 class="font-semibold text-slate-800">Classic</h4>
+                <p class="text-xs text-gray-500">A timeless, formal design.</p>
+                <input type="radio" id="template-classic" value="classic" formControlName="template" class="sr-only">
+              </label>
+              <label for="template-modern" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'modern'" [class.border-gray-300]="form.get('template')?.value !== 'modern'">
+                <div class="w-full h-20 bg-blue-100 rounded-md flex items-center justify-center mb-3">
+                  <div class="w-4/5 h-4/5 bg-white shadow-sm p-2 flex"><div class="w-2 h-full bg-blue-800 rounded-sm mr-2"></div><div class="flex-grow"><div class="w-1/3 h-2 bg-blue-800 rounded-sm mb-2"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-2/3 h-1 bg-gray-300 rounded-sm"></div></div></div>
+                </div>
+                <h4 class="font-semibold text-slate-800">Modern</h4>
+                <p class="text-xs text-gray-500">A clean, professional look.</p>
+                <input type="radio" id="template-modern" value="modern" formControlName="template" class="sr-only">
+              </label>
+              <label for="template-creative" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'creative'" [class.border-gray-300]="form.get('template')?.value !== 'creative'">
+                <div class="w-full h-20 bg-gray-300 rounded-md flex items-center justify-center mb-3">
+                  <div class="w-4/5 h-4/5 bg-white shadow-sm p-2"><div class="w-full h-4 bg-gray-800 rounded-sm mb-2"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-2/3 h-1 bg-gray-300 rounded-sm"></div></div>
+                </div>
+                <h4 class="font-semibold text-slate-800">Creative</h4>
+                <p class="text-xs text-gray-500">A bold, stylish statement.</p>
+                <input type="radio" id="template-creative" value="creative" formControlName="template" class="sr-only">
+              </label>
+              <label for="template-regal" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'regal'" [class.border-gray-300]="form.get('template')?.value !== 'regal'">
+                <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3 overflow-hidden">
+                  <div class="w-4/5 h-4/5 bg-white shadow-sm relative"><div class="w-full h-4 bg-blue-800 absolute top-0 left-0 border-b-2 border-yellow-400"></div></div>
+                </div>
+                <h4 class="font-semibold text-slate-800">Regal</h4>
+                <p class="text-xs text-gray-500">An elegant, prestigious look.</p>
+                <input type="radio" id="template-regal" value="regal" formControlName="template" class="sr-only">
+              </label>
+              <label for="template-vibrant" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'vibrant'" [class.border-gray-300]="form.get('template')?.value !== 'vibrant'">
+                <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3 overflow-hidden">
+                  <div class="w-4/5 h-4/5 bg-white shadow-sm relative"><div class="w-full h-1 bg-green-500 absolute top-0 left-0"></div><div class="w-1 h-full bg-green-500 absolute right-0 top-0"></div></div>
+                </div>
+                <h4 class="font-semibold text-slate-800">Vibrant</h4>
+                <p class="text-xs text-gray-500">A dynamic, modern feel.</p>
+                <input type="radio" id="template-vibrant" value="vibrant" formControlName="template" class="sr-only">
+              </label>
+              <label for="template-formal" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'formal'" [class.border-gray-300]="form.get('template')?.value !== 'formal'">
+                <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3 overflow-hidden">
+                  <div class="w-4/5 h-4/5 bg-white shadow-sm relative p-1">
+                    <div class="w-1/4 h-2 bg-gray-400 absolute top-1 left-1 rounded-sm"></div>
+                    <div class="w-1/4 h-1 bg-gray-400 absolute top-1 right-1 rounded-sm text-right"></div>
+                    <div class="w-full h-1 bg-gray-500 absolute top-4 left-0 right-0 mx-auto"></div>
+                    <div class="w-full h-px bg-gray-300 absolute bottom-3 left-0 right-0 mx-auto"></div>
+                  </div>
+                </div>
+                <h4 class="font-semibold text-slate-800">Formal</h4>
+                <p class="text-xs text-gray-500">A traditional, corporate style.</p>
+                <input type="radio" id="template-formal" value="formal" formControlName="template" class="sr-only">
+              </label>
+              <label for="template-tech" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'tech'" [class.border-gray-300]="form.get('template')?.value !== 'tech'">
+                <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3 overflow-hidden">
+                  <div class="w-4/5 h-4/5 bg-white shadow-sm flex"><div class="w-1/4 h-full bg-blue-800 p-1"><div class="w-full h-3 bg-white rounded-sm"></div></div><div class="w-3/4 p-1"><div class="w-full h-1 bg-green-500 rounded-sm mb-1"></div><div class="w-full h-1 bg-gray-300 rounded-sm"></div></div></div>
+                </div>
+                <h4 class="font-semibold text-slate-800">Tech</h4>
+                <p class="text-xs text-gray-500">A sidebar-focused, modern look.</p>
+                <input type="radio" id="template-tech" value="tech" formControlName="template" class="sr-only">
+              </label>
+              <label for="template-corporate" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'corporate'" [class.border-gray-300]="form.get('template')?.value !== 'corporate'">
+                <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3 overflow-hidden">
+                  <div class="w-4/5 h-4/5 bg-white shadow-sm relative"><div class="w-full h-4 bg-black absolute top-0 left-0 border-b-2 border-yellow-400"></div><div class="absolute bottom-0 left-0 w-full h-3 bg-gray-100 border-t border-gray-200"></div></div>
+                </div>
+                <h4 class="font-semibold text-slate-800">Corporate</h4>
+                <p class="text-xs text-gray-500">A premium, authoritative style.</p>
+                <input type="radio" id="template-corporate" value="corporate" formControlName="template" class="sr-only">
+              </label>
+            </div>
+          </section>
 
-      @if(activeTab() === 'customize') {
-        <div class="space-y-6">
-           <section>
-              <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Typography & Colors</h3>
-              <div class="space-y-4">
-                <div>
-                  <label for="fontFamily" class="block text-sm font-medium text-gray-700">Font Family</label>
-                  <select id="fontFamily" formControlName="fontFamily" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
-                    <option value="Inter">Inter (Sans-serif)</option>
-                    <option value="Merriweather">Merriweather (Serif)</option>
-                    <option value="Lato">Lato (Sans-serif)</option>
-                    <option value="Roboto Slab">Roboto Slab (Serif)</option>
-                    <option value="Montserrat">Montserrat (Sans-serif)</option>
-                  </select>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                      <label for="headingColor" class="block text-sm font-medium text-gray-700">Heading Color</label>
-                      <input type="color" id="headingColor" formControlName="headingColor" class="mt-1 h-10 block w-full rounded-md border-gray-300 shadow-sm">
-                    </div>
-                     <div>
-                      <label for="bodyColor" class="block text-sm font-medium text-gray-700">Body Color</label>
-                      <input type="color" id="bodyColor" formControlName="bodyColor" class="mt-1 h-10 block w-full rounded-md border-gray-300 shadow-sm">
-                    </div>
-                     <div>
-                      <label for="accentColor" class="block text-sm font-medium text-gray-700">Accent Color</label>
-                      <input type="color" id="accentColor" formControlName="accentColor" class="mt-1 h-10 block w-full rounded-md border-gray-300 shadow-sm">
-                    </div>
-                </div>
+          <section>
+            <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Typography & Colors</h3>
+            <div class="space-y-4">
+              <div>
+                <label for="fontFamily" class="block text-sm font-medium text-gray-700">Font Family</label>
+                <select id="fontFamily" formControlName="fontFamily" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+                  <option value="Inter">Inter (Sans-serif)</option>
+                  <option value="Merriweather">Merriweather (Serif)</option>
+                  <option value="Lato">Lato (Sans-serif)</option>
+                  <option value="Roboto Slab">Roboto Slab (Serif)</option>
+                  <option value="Montserrat">Montserrat (Sans-serif)</option>
+                </select>
               </div>
-           </section>
-           <section>
-              <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Layout</h3>
-               <div>
-                  <label class="block text-sm font-medium text-gray-700">Logo Alignment</label>
-                  <fieldset class="mt-2">
-                    <div class="flex space-x-4">
-                      <div class="flex items-center">
-                        <input id="logo-left" value="left" formControlName="logoAlignment" type="radio" class="focus:ring-slate-500 h-4 w-4 text-slate-600 border-gray-300">
-                        <label for="logo-left" class="ml-2 block text-sm text-gray-900">Left</label>
-                      </div>
-                       <div class="flex items-center">
-                        <input id="logo-right" value="right" formControlName="logoAlignment" type="radio" class="focus:ring-slate-500 h-4 w-4 text-slate-600 border-gray-300">
-                        <label for="logo-right" class="ml-2 block text-sm text-gray-900">Right</label>
-                      </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label for="headingColor" class="block text-sm font-medium text-gray-700">Heading Color</label>
+                    <input type="color" id="headingColor" formControlName="headingColor" class="mt-1 h-10 block w-full rounded-md border-gray-300 shadow-sm">
+                  </div>
+                    <div>
+                    <label for="bodyColor" class="block text-sm font-medium text-gray-700">Body Color</label>
+                    <input type="color" id="bodyColor" formControlName="bodyColor" class="mt-1 h-10 block w-full rounded-md border-gray-300 shadow-sm">
+                  </div>
+                    <div>
+                    <label for="accentColor" class="block text-sm font-medium text-gray-700">Accent Color</label>
+                    <input type="color" id="accentColor" formControlName="accentColor" class="mt-1 h-10 block w-full rounded-md border-gray-300 shadow-sm">
+                  </div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Layout & Arrangement</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Logo Alignment</label>
+                <fieldset class="mt-2">
+                  <div class="flex space-x-4">
+                    <div class="flex items-center">
+                      <input id="logo-left" value="left" formControlName="logoAlignment" type="radio" class="focus:ring-slate-500 h-4 w-4 text-slate-600 border-gray-300">
+                      <label for="logo-left" class="ml-2 block text-sm text-gray-900">Left</label>
                     </div>
-                  </fieldset>
-               </div>
-           </section>
+                      <div class="flex items-center">
+                      <input id="logo-right" value="right" formControlName="logoAlignment" type="radio" class="focus:ring-slate-500 h-4 w-4 text-slate-600 border-gray-300">
+                      <label for="logo-right" class="ml-2 block text-sm text-gray-900">Right</label>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+               <div>
+                  <label class="block text-sm font-medium text-gray-700">Arrange Elements (Drag & Drop)</label>
+                  <div class="flex items-center mt-2">
+                    <input type="checkbox" id="arrange-toggle" [checked]="uiService.isArrangeMode()" (change)="uiService.isArrangeMode.set($any($event.target).checked)" class="h-4 w-4 rounded border-gray-300 text-slate-600 focus:ring-slate-500">
+                    <label for="arrange-toggle" class="ml-2 text-sm text-gray-600">Enable drag and drop</label>
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1">Note: Not all templates support arrangement.</p>
+              </div>
+            </div>
+          </section>
+
         </div>
       }
     </form>

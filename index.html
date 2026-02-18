@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -211,6 +210,126 @@
         z-index: 0;
         pointer-events: none;
     }
+
+    /* --- Tech Template --- */
+    .template-tech {
+      display: flex;
+      padding: 0;
+      margin: -3rem; /* Extend to edges of preview container */
+    }
+    .template-tech .tech-sidebar {
+      background-color: var(--custom-accent-color, var(--color-blue));
+      color: white;
+      width: 250px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .template-tech .tech-sidebar .company-logo {
+      max-width: 120px;
+      max-height: 120px;
+      background-color: white;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .template-tech .tech-sidebar .company-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+    }
+    .template-tech .tech-content {
+      flex-grow: 1;
+      padding: 3rem;
+    }
+    .template-tech .tech-content h3 {
+      color: var(--color-green);
+    }
+    .template-tech .tech-content .letter-signature {
+       border-top: 2px solid var(--color-green);
+       margin-top: 2rem;
+       padding-top: 1rem;
+    }
+
+    /* --- Corporate Template --- */
+    .template-corporate {
+      padding: 0;
+      margin: -3rem; /* Extend to edges of preview container */
+    }
+    .template-corporate .corporate-header {
+      background-color: var(--custom-accent-color, var(--color-black));
+      color: white;
+      padding: 2rem 3rem;
+      text-align: center;
+      border-bottom: 5px solid var(--color-yellow);
+    }
+    .template-corporate .corporate-header .company-name {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .template-corporate .corporate-content {
+      padding: 3rem;
+    }
+    .template-corporate .corporate-content h3 {
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--custom-heading-color, var(--color-black));
+      border-bottom: 1px solid var(--color-ceramic);
+      padding-bottom: 0.5rem;
+    }
+    .template-corporate .letter-signature {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--color-ceramic);
+    }
+    .template-corporate .corporate-footer {
+      background-color: #f8f9fa; /* Light gray */
+      padding: 1.5rem 3rem;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6c757d;
+    }
+
+    /* --- Drag and Drop Styles --- */
+    .cdk-drag-preview {
+      box-sizing: border-box;
+      border-radius: 4px;
+      box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    }
+    .cdk-drag-placeholder {
+      opacity: 0.2;
+    }
+    .cdk-drop-list-dragging .cdk-drag {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+    .draggable-item {
+      position: relative;
+    }
+    .arrange-mode .draggable-item {
+      border: 2px dashed var(--color-ceramic);
+      padding-top: 2.5rem;
+      margin-top: 1rem;
+      border-radius: 4px;
+    }
+    .drag-handle {
+      position: absolute;
+      top: 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: move;
+      color: var(--color-ceramic);
+      padding: 0.25rem;
+      border-radius: 4px;
+      background-color: rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
   </style>
 <script type="importmap">
 {
@@ -228,7 +347,8 @@
     "@angular/common/http": "https://esm.sh/@angular/common@^21.1.4/http?external=rxjs",
     "@angular/core": "https://esm.sh/@angular/core@^21.1.4?external=rxjs",
     "@angular/forms": "https://esm.sh/@angular/forms@^21.1.4?external=rxjs",
-    "@angular/compiler": "https://esm.sh/@angular/compiler@^21.1.4?external=rxjs"
+    "@angular/compiler": "https://esm.sh/@angular/compiler@^21.1.4?external=rxjs",
+    "@angular/cdk/drag-drop": "https://esm.sh/@angular/cdk@18.0.5/drag-drop?external=rxjs,@angular/core,@angular/common,@angular/platform-browser"
   }
 }
 </script>

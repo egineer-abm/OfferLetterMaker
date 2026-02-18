@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { GoogleGenAI, Type } from '@google/genai';
 import { OfferLetterData } from '../models/letter.model';
@@ -53,6 +52,22 @@ export class GeminiService {
  {
       console.error('Error generating letter content:', error);
       throw new Error('Failed to generate letter content. Please check your prompt and API key.');
+    }
+  }
+
+  async rewriteText(text: string): Promise<string> {
+    if (!text.trim()) {
+      return text;
+    }
+    try {
+      const response = await this.ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: `Rewrite the following text to be more professional, clear, and engaging. Return only the rewritten text, without any introductory phrases.\n\nTEXT: "${text}"`,
+      });
+      return response.text.trim();
+    } catch (error) {
+      console.error('Error rewriting text:', error);
+      throw new Error('Failed to rewrite text.');
     }
   }
 }

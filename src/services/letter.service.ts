@@ -1,31 +1,20 @@
-
 import { Injectable, signal } from '@angular/core';
 import { OfferLetterData } from '../models/letter.model';
 
 @Injectable({ providedIn: 'root' })
 export class LetterService {
-  private defaultBody = `We are delighted to offer you the position of {jobTitle} at {companyName}. We were impressed with your qualifications and experience, and we believe you will be a valuable asset to our team.
-
-This is a {offerType} position, starting on {startDate}. You will report to {managerName}. {compensationDetails}
-
-Please review the attached documents for more details about your compensation, benefits, and the terms of your employment.
-
-To accept this offer, please sign and return this letter by {acceptanceDeadline}.
-
-We look forward to welcoming you to the team.
-
-Sincerely,`;
+  private defaultBody = `<p>We are delighted to offer you the position of {jobTitle} at {companyName}. We were impressed with your qualifications and experience, and we believe you will be a valuable asset to our team.</p><p>This is a {offerType} position, starting on {startDate}. You will report to {managerName}. {compensationDetails}</p><p>Please review the attached documents for more details about your compensation, benefits, and the terms of your employment.</p><p>To accept this offer, please sign and return this letter by {acceptanceDeadline}.</p><p>We look forward to welcoming you to the team.</p><p>Sincerely,</p>`;
 
   private initialState: OfferLetterData = {
     companyName: 'Innovate Inc.',
-    companyAddress: '123 Tech Avenue, Silicon Valley, CA 94000',
+    companyAddress: '',
     companyLogo: null,
     companyEmail: 'hr@innovate.com',
     companyPhone: '1-800-555-1234',
     companyWebsite: 'www.innovate.com',
     companyLinkedIn: 'linkedin.com/company/innovate-inc',
     candidateName: 'John Doe',
-    candidateAddress: '456 Home Street, Anytown, USA 12345',
+    candidateAddress: '',
     date: new Date().toISOString().split('T')[0],
     jobTitle: 'Software Engineer Intern',
     startDate: new Date(new Date().setDate(new Date().getDate() + 14)).toISOString().split('T')[0],
@@ -39,12 +28,13 @@ Sincerely,`;
     signerName: 'Alex Chen',
     signerTitle: 'Hiring Manager',
     signerSignature: null,
-    template: 'classic',
+    template: 'formal',
     fontFamily: 'Merriweather',
     headingColor: '#1D1D1D',
     bodyColor: '#1D1D1D',
     accentColor: '#2D3C77',
     logoAlignment: 'right',
+    elementOrder: ['header', 'date', 'subject', 'body', 'signature'],
   };
 
   letterData = signal<OfferLetterData>(this.initialState);
