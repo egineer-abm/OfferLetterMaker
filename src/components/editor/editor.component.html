@@ -1,0 +1,350 @@
+
+<div class="p-6 h-full flex flex-col">
+  <div class="border-b border-gray-200 mb-6">
+    <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+      <button (click)="activeTab.set('details')" [class.border-slate-500]="activeTab() === 'details'" [class.text-slate-600]="activeTab() === 'details'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Details</button>
+      <button (click)="activeTab.set('style')" [class.border-slate-500]="activeTab() === 'style'" [class.text-slate-600]="activeTab() === 'style'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Style</button>
+      <button (click)="activeTab.set('customize')" [class.border-slate-500]="activeTab() === 'customize'" [class.text-slate-600]="activeTab() === 'customize'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Customize</button>
+      <button (click)="activeTab.set('ai')" [class.border-slate-500]="activeTab() === 'ai'" [class.text-slate-600]="activeTab() === 'ai'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">AI Assistant</button>
+      <button (click)="activeTab.set('export')" [class.border-slate-500]="activeTab() === 'export'" [class.text-slate-600]="activeTab() === 'export'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Export</button>
+    </nav>
+  </div>
+
+  <div class="flex-grow overflow-y-auto pr-2">
+    <form [formGroup]="form">
+      @if (activeTab() === 'details') {
+        <div class="space-y-6">
+          <!-- Company Details -->
+          <section>
+            <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Company Details</h3>
+            <div class="space-y-4">
+               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                 <div>
+                    <label for="companyName" class="block text-sm font-medium text-gray-700">Company Name</label>
+                    <input type="text" id="companyName" formControlName="companyName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+                  </div>
+                   <div>
+                    <label for="companyPhone" class="block text-sm font-medium text-gray-700">Company Phone</label>
+                    <input type="tel" id="companyPhone" formControlName="companyPhone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+                  </div>
+              </div>
+               <div>
+                  <label for="companyEmail" class="block text-sm font-medium text-gray-700">Company Email</label>
+                  <input type="email" id="companyEmail" formControlName="companyEmail" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                 <div>
+                    <label for="companyWebsite" class="block text-sm font-medium text-gray-700">Company Website</label>
+                    <input type="url" id="companyWebsite" formControlName="companyWebsite" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm" placeholder="www.example.com">
+                  </div>
+                   <div>
+                    <label for="companyLinkedIn" class="block text-sm font-medium text-gray-700">Company LinkedIn</label>
+                    <input type="url" id="companyLinkedIn" formControlName="companyLinkedIn" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm" placeholder="linkedin.com/company/name">
+                  </div>
+              </div>
+              <div>
+                <label for="companyAddress" class="block text-sm font-medium text-gray-700">Company Address</label>
+                <textarea id="companyAddress" formControlName="companyAddress" rows="2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm"></textarea>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Company Logo</label>
+                @if (form.get('companyLogo')?.value) {
+                  <div class="mt-2 flex items-center space-x-4">
+                    <img [src]="form.get('companyLogo')?.value" alt="Company Logo" class="h-16 w-16 object-contain rounded-md border p-1">
+                    <button type="button" (click)="removeLogo()" class="text-sm text-red-600 hover:text-red-800">Remove</button>
+                  </div>
+                } @else {
+                  <div class="mt-2 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
+                    <div class="space-y-1 text-center">
+                      <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                      <div class="flex justify-center items-center text-sm text-gray-600">
+                        <label for="logo-upload" class="relative cursor-pointer rounded-md bg-white font-medium text-slate-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-slate-500 focus-within:ring-offset-2 hover:text-slate-500">
+                          <span>Upload a file</span>
+                          <input id="logo-upload" name="logo-upload" type="file" class="sr-only" (change)="onLogoUpload($event)" accept="image/*">
+                        </label>
+                        <span class="mx-2 text-gray-400">or</span>
+                        <button type="button" (click)="generateLogo()" class="font-medium text-slate-600 hover:text-slate-500 focus:outline-none underline">Generate</button>
+                      </div>
+                      <p class="text-xs text-gray-500">PNG, JPG, GIF, SVG up to 2MB</p>
+                    </div>
+                  </div>
+                }
+                @if (logoError()) {
+                  <p class="mt-2 text-sm text-red-600">{{ logoError() }}</p>
+                }
+              </div>
+            </div>
+          </section>
+
+          <!-- Candidate & Offer Details -->
+          <section>
+            <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Offer Details</h3>
+            <div class="grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-6">
+              <div class="sm:col-span-6">
+                <label for="candidateName" class="block text-sm font-medium text-gray-700">Candidate Name</label>
+                <input type="text" id="candidateName" formControlName="candidateName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+              </div>
+              <div class="sm:col-span-3">
+                <label for="jobTitle" class="block text-sm font-medium text-gray-700">Job Title</label>
+                <input type="text" id="jobTitle" formControlName="jobTitle" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+              </div>
+              <div class="sm:col-span-3">
+                <label for="offerType" class="block text-sm font-medium text-gray-700">Offer Type</label>
+                <select id="offerType" formControlName="offerType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+                  <option>Internship</option>
+                  <option>Full-Time Employment</option>
+                </select>
+              </div>
+               <div class="sm:col-span-3">
+                <label for="date" class="block text-sm font-medium text-gray-700">Offer Date</label>
+                <input type="date" id="date" formControlName="date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+              </div>
+              <div class="sm:col-span-3">
+                <label for="startDate" class="block text-sm font-medium text-gray-700">Start Date</label>
+                <input type="date" id="startDate" formControlName="startDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+              </div>
+              <div class="sm:col-span-6">
+                <label class="block text-sm font-medium text-gray-700">Compensation Type</label>
+                <fieldset class="mt-2">
+                  <div class="flex space-x-4">
+                    <div class="flex items-center">
+                      <input id="comp-salary" name="compensation-type" type="radio" [checked]="compensationType() === 'salary'" (change)="setCompensationType('salary')" class="focus:ring-slate-500 h-4 w-4 text-slate-600 border-gray-300">
+                      <label for="comp-salary" class="ml-2 block text-sm text-gray-900">Salary</label>
+                    </div>
+                     <div class="flex items-center">
+                      <input id="comp-perks" name="compensation-type" type="radio" [checked]="compensationType() === 'perks'" (change)="setCompensationType('perks')" class="focus:ring-slate-500 h-4 w-4 text-slate-600 border-gray-300">
+                      <label for="comp-perks" class="ml-2 block text-sm text-gray-900">Perks / Unpaid</label>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+
+              @if(compensationType() === 'salary') {
+               <div class="sm:col-span-3">
+                <label for="salary" class="block text-sm font-medium text-gray-700">Salary</label>
+                <input type="number" id="salary" formControlName="salary" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+              </div>
+               <div class="sm:col-span-3">
+                <label for="salaryFrequency" class="block text-sm font-medium text-gray-700">Frequency</label>
+                <select id="salaryFrequency" formControlName="salaryFrequency" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+                  <option value="annually">Annually</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="hourly">Hourly</option>
+                </select>
+              </div>
+              } @else {
+                <div class="sm:col-span-6">
+                  <label for="perksAndBenefits" class="block text-sm font-medium text-gray-700">Perks and Benefits</label>
+                  <textarea id="perksAndBenefits" formControlName="perksAndBenefits" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm" placeholder="e.g., College credit, free lunch, mentorship program..."></textarea>
+                </div>
+              }
+            </div>
+          </section>
+
+          <!-- Letter Body -->
+          <section>
+             <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Letter Content</h3>
+             <div>
+                <label for="body" class="block text-sm font-medium text-gray-700">Body</label>
+                <textarea id="body" formControlName="body" rows="12" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm"></textarea>
+                <p class="mt-2 text-xs text-gray-500">Use placeholders like <code>&lbrace;jobTitle&rbrace;</code>, <code>&lbrace;compensationDetails&rbrace;</code>, etc.</p>
+             </div>
+          </section>
+
+          <!-- Signature Details -->
+          <section>
+            <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Signature Details</h3>
+            <div class="space-y-4">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                 <div>
+                  <label for="signerName" class="block text-sm font-medium text-gray-700">Signer's Name</label>
+                  <input type="text" id="signerName" formControlName="signerName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+                </div>
+                 <div>
+                  <label for="signerTitle" class="block text-sm font-medium text-gray-700">Signer's Title</label>
+                  <input type="text" id="signerTitle" formControlName="signerTitle" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Signature Image</label>
+                @if (form.get('signerSignature')?.value) {
+                  <div class="mt-2 flex items-center space-x-4">
+                    <img [src]="form.get('signerSignature')?.value" alt="Signature" class="h-12 object-contain rounded-md border p-1 bg-white">
+                    <button type="button" (click)="removeSignature()" class="text-sm text-red-600 hover:text-red-800">Remove</button>
+                  </div>
+                } @else {
+                   <div class="mt-2 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
+                    <div class="space-y-1 text-center">
+                      <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+                      <div class="flex text-sm text-gray-600"><label for="signature-upload" class="relative cursor-pointer rounded-md bg-white font-medium text-slate-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-slate-500 focus-within:ring-offset-2 hover:text-slate-500"><span>Upload a file</span><input id="signature-upload" name="signature-upload" type="file" class="sr-only" (change)="onSignatureUpload($event)" accept="image/*"></label></div>
+                       <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
+                    </div>
+                  </div>
+                }
+                @if(signatureError()){
+                   <p class="mt-2 text-sm text-red-600">{{ signatureError() }}</p>
+                }
+              </div>
+            </div>
+          </section>
+        </div>
+      }
+
+      @if (activeTab() === 'style') {
+        <div class="space-y-6">
+          <h3 class="text-lg font-semibold text-slate-800">Choose a Template</h3>
+          <p class="text-sm text-gray-600">Select a visual style for your offer letter. The preview will update instantly.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+             <label for="template-classic" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'classic'" [class.border-gray-300]="form.get('template')?.value !== 'classic'">
+              <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3">
+                  <div class="w-4/5 h-4/5 bg-white shadow-sm p-2"><div class="w-1/3 h-2 bg-gray-400 rounded-sm mb-2"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-2/3 h-1 bg-gray-300 rounded-sm"></div></div>
+              </div>
+              <h4 class="font-semibold text-slate-800">Classic</h4>
+              <p class="text-xs text-gray-500">A timeless, formal design.</p>
+              <input type="radio" id="template-classic" value="classic" formControlName="template" class="sr-only">
+            </label>
+             <label for="template-modern" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'modern'" [class.border-gray-300]="form.get('template')?.value !== 'modern'">
+              <div class="w-full h-20 bg-blue-100 rounded-md flex items-center justify-center mb-3">
+                 <div class="w-4/5 h-4/5 bg-white shadow-sm p-2 flex"><div class="w-2 h-full bg-blue-800 rounded-sm mr-2"></div><div class="flex-grow"><div class="w-1/3 h-2 bg-blue-800 rounded-sm mb-2"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-2/3 h-1 bg-gray-300 rounded-sm"></div></div></div>
+              </div>
+              <h4 class="font-semibold text-slate-800">Modern</h4>
+              <p class="text-xs text-gray-500">A clean, professional look.</p>
+              <input type="radio" id="template-modern" value="modern" formControlName="template" class="sr-only">
+            </label>
+             <label for="template-creative" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'creative'" [class.border-gray-300]="form.get('template')?.value !== 'creative'">
+              <div class="w-full h-20 bg-gray-300 rounded-md flex items-center justify-center mb-3">
+                 <div class="w-4/5 h-4/5 bg-white shadow-sm p-2"><div class="w-full h-4 bg-gray-800 rounded-sm mb-2"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-full h-1 bg-gray-300 rounded-sm mb-1"></div><div class="w-2/3 h-1 bg-gray-300 rounded-sm"></div></div>
+              </div>
+              <h4 class="font-semibold text-slate-800">Creative</h4>
+              <p class="text-xs text-gray-500">A bold, stylish statement.</p>
+              <input type="radio" id="template-creative" value="creative" formControlName="template" class="sr-only">
+            </label>
+             <label for="template-regal" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'regal'" [class.border-gray-300]="form.get('template')?.value !== 'regal'">
+              <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3 overflow-hidden">
+                 <div class="w-4/5 h-4/5 bg-white shadow-sm relative"><div class="w-full h-4 bg-blue-800 absolute top-0 left-0 border-b-2 border-yellow-400"></div></div>
+              </div>
+              <h4 class="font-semibold text-slate-800">Regal</h4>
+              <p class="text-xs text-gray-500">An elegant, prestigious look.</p>
+              <input type="radio" id="template-regal" value="regal" formControlName="template" class="sr-only">
+            </label>
+            <label for="template-vibrant" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'vibrant'" [class.border-gray-300]="form.get('template')?.value !== 'vibrant'">
+              <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3 overflow-hidden">
+                 <div class="w-4/5 h-4/5 bg-white shadow-sm relative"><div class="w-full h-1 bg-green-500 absolute top-0 left-0"></div><div class="w-1 h-full bg-green-500 absolute right-0 top-0"></div></div>
+              </div>
+              <h4 class="font-semibold text-slate-800">Vibrant</h4>
+              <p class="text-xs text-gray-500">A dynamic, modern feel.</p>
+              <input type="radio" id="template-vibrant" value="vibrant" formControlName="template" class="sr-only">
+            </label>
+            <label for="template-formal" class="cursor-pointer rounded-lg border-2 p-4 flex flex-col items-center justify-center text-center transition-all" [class.border-slate-600]="form.get('template')?.value === 'formal'" [class.border-gray-300]="form.get('template')?.value !== 'formal'">
+              <div class="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center mb-3 overflow-hidden">
+                 <div class="w-4/5 h-4/5 bg-white shadow-sm relative p-1">
+                   <div class="w-1/4 h-2 bg-gray-400 absolute top-1 left-1 rounded-sm"></div>
+                   <div class="w-1/4 h-1 bg-gray-400 absolute top-1 right-1 rounded-sm text-right"></div>
+                   <div class="w-full h-1 bg-gray-500 absolute top-4 left-0 right-0 mx-auto"></div>
+                   <div class="w-full h-px bg-gray-300 absolute bottom-3 left-0 right-0 mx-auto"></div>
+                 </div>
+              </div>
+              <h4 class="font-semibold text-slate-800">Formal</h4>
+              <p class="text-xs text-gray-500">A traditional, corporate style.</p>
+              <input type="radio" id="template-formal" value="formal" formControlName="template" class="sr-only">
+            </label>
+          </div>
+        </div>
+      }
+
+      @if(activeTab() === 'customize') {
+        <div class="space-y-6">
+           <section>
+              <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Typography & Colors</h3>
+              <div class="space-y-4">
+                <div>
+                  <label for="fontFamily" class="block text-sm font-medium text-gray-700">Font Family</label>
+                  <select id="fontFamily" formControlName="fontFamily" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm">
+                    <option value="Inter">Inter (Sans-serif)</option>
+                    <option value="Merriweather">Merriweather (Serif)</option>
+                    <option value="Lato">Lato (Sans-serif)</option>
+                    <option value="Roboto Slab">Roboto Slab (Serif)</option>
+                    <option value="Montserrat">Montserrat (Sans-serif)</option>
+                  </select>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label for="headingColor" class="block text-sm font-medium text-gray-700">Heading Color</label>
+                      <input type="color" id="headingColor" formControlName="headingColor" class="mt-1 h-10 block w-full rounded-md border-gray-300 shadow-sm">
+                    </div>
+                     <div>
+                      <label for="bodyColor" class="block text-sm font-medium text-gray-700">Body Color</label>
+                      <input type="color" id="bodyColor" formControlName="bodyColor" class="mt-1 h-10 block w-full rounded-md border-gray-300 shadow-sm">
+                    </div>
+                     <div>
+                      <label for="accentColor" class="block text-sm font-medium text-gray-700">Accent Color</label>
+                      <input type="color" id="accentColor" formControlName="accentColor" class="mt-1 h-10 block w-full rounded-md border-gray-300 shadow-sm">
+                    </div>
+                </div>
+              </div>
+           </section>
+           <section>
+              <h3 class="text-lg font-semibold text-slate-800 mb-4 border-b pb-2">Layout</h3>
+               <div>
+                  <label class="block text-sm font-medium text-gray-700">Logo Alignment</label>
+                  <fieldset class="mt-2">
+                    <div class="flex space-x-4">
+                      <div class="flex items-center">
+                        <input id="logo-left" value="left" formControlName="logoAlignment" type="radio" class="focus:ring-slate-500 h-4 w-4 text-slate-600 border-gray-300">
+                        <label for="logo-left" class="ml-2 block text-sm text-gray-900">Left</label>
+                      </div>
+                       <div class="flex items-center">
+                        <input id="logo-right" value="right" formControlName="logoAlignment" type="radio" class="focus:ring-slate-500 h-4 w-4 text-slate-600 border-gray-300">
+                        <label for="logo-right" class="ml-2 block text-sm text-gray-900">Right</label>
+                      </div>
+                    </div>
+                  </fieldset>
+               </div>
+           </section>
+        </div>
+      }
+    </form>
+
+    @if (activeTab() === 'ai') {
+      <div class="space-y-6">
+        <h3 class="text-lg font-semibold text-slate-800">Generate with AI</h3>
+        <p class="text-sm text-gray-600">Describe the offer letter you want to create. The AI will fill in the details for you. You can then review and edit them in the 'Details' tab.</p>
+        <div>
+          <label for="ai-prompt" class="block text-sm font-medium text-gray-700">Your Request</label>
+          <textarea id="ai-prompt" [value]="aiPrompt()" (input)="aiPrompt.set($any($event.target).value)" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 sm:text-sm" placeholder="e.g., An unpaid internship for a marketing student with college credit and free lunch as perks..."></textarea>
+        </div>
+        <button (click)="generateWithAI()" [disabled]="aiLoading()" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-600 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 disabled:bg-slate-400 disabled:cursor-not-allowed">
+          @if(aiLoading()) {
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Generating...
+          } @else {
+            Generate Content
+          }
+        </button>
+        @if (aiError()) {
+          <p class="text-sm text-red-600 bg-red-50 p-3 rounded-md">{{ aiError() }}</p>
+        }
+      </div>
+    }
+
+    @if (activeTab() === 'export') {
+      <div class="space-y-6">
+        <h3 class="text-lg font-semibold text-slate-800">Export Letter</h3>
+        <p class="text-sm text-gray-600">Once you are happy with the preview, you can export the letter as a PDF or a DOCX file.</p>
+        <div class="space-y-4">
+          <button (click)="exportToPdf()" class="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+            Export as PDF
+          </button>
+          <button (click)="exportToDocx()" class="w-full flex items-center justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+            Export as DOCX
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

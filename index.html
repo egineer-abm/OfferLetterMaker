@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>AI Offer Letter Generator</title>
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://unpkg.com/html-to-docx@1.8.0/dist/html-to-docx.js"></script>
+  <style>
+    /* Add a professional font for the letter preview */
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Lato:wght@400;700&family=Roboto+Slab:wght@400;700&family=Montserrat:wght@400;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .letter-preview {
+      color: var(--custom-body-color, #1D1D1D);
+    }
+
+    /* Template Styles */
+    :root {
+      --color-green: #07F57B;
+      --color-blue: #2D3C77;
+      --color-black: #1D1D1D;
+      --color-yellow: #FCD202;
+      --color-ceramic: #A6C5E2;
+    }
+
+    .letter-preview .letter-header, .letter-preview .letter-body, .letter-preview .letter-signature {
+      transition: all 0.3s ease-in-out;
+    }
+    
+    /* --- Modern Template --- */
+    .template-modern .letter-header {
+      border-left: 8px solid var(--custom-accent-color, var(--color-blue));
+      padding-left: 2rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 3rem;
+      background-color: #f0f5fa; /* Light blue background */
+    }
+    .template-modern .letter-header h2 {
+      color: var(--custom-heading-color, var(--color-blue));
+      font-size: 2.25rem;
+    }
+    .template-modern h3 {
+      color: var(--custom-heading-color, var(--color-blue));
+    }
+    .template-modern .letter-signature {
+      border-top: 2px solid var(--custom-accent-color, var(--color-blue));
+      padding-top: 1rem;
+    }
+
+    /* --- Creative Template --- */
+    .template-creative .letter-header {
+      position: relative;
+      background-color: var(--custom-accent-color, var(--color-black));
+      color: white;
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      border-radius: 0.5rem;
+    }
+    .template-creative .letter-header::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      right: 2rem;
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-top: 20px solid var(--color-green);
+    }
+     .template-creative .letter-header h2 {
+      color: var(--color-green);
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .template-creative .letter-header p {
+      color: var(--color-ceramic);
+    }
+    .template-creative h3 {
+      color: var(--custom-heading-color, var(--color-black));
+      border-bottom: 3px solid var(--custom-accent-color, var(--color-yellow));
+      padding-bottom: 0.5rem;
+      display: inline-block;
+    }
+    .template-creative .letter-signature {
+        border-top: 2px solid var(--custom-accent-color, var(--color-green));
+        padding-top: 1rem;
+    }
+
+    /* --- Regal Template --- */
+    .template-regal .letter-header {
+      background-color: var(--custom-accent-color, var(--color-blue));
+      color: white;
+      padding: 2rem;
+      margin: -3rem -3rem 3rem -3rem; /* Extend to edges */
+      border-bottom: 4px solid var(--color-yellow);
+    }
+    .template-regal .letter-header h2 {
+      color: var(--custom-heading-color, white);
+    }
+    .template-regal .letter-header p {
+      color: var(--color-ceramic);
+    }
+    .template-regal h3 {
+      color: var(--custom-heading-color, var(--color-blue));
+      font-weight: 700;
+    }
+    .template-regal .letter-signature {
+      border-top: 1px solid var(--color-ceramic);
+      margin-top: 2rem;
+      padding-top: 1rem;
+    }
+
+    /* --- Vibrant Template --- */
+    .template-vibrant {
+        position: relative;
+    }
+    .template-vibrant::before {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 8px;
+        background-color: var(--custom-accent-color, var(--color-green));
+    }
+    .template-vibrant .letter-header {
+      border-top: 8px solid var(--custom-accent-color, var(--color-green));
+      padding-top: 1.5rem;
+    }
+    .template-vibrant .letter-header h2 {
+      color: var(--custom-heading-color, var(--color-black));
+      font-size: 2.5rem;
+    }
+    .template-vibrant h3 {
+      color: var(--custom-heading-color, var(--color-black));
+    }
+    .template-vibrant .letter-signature {
+      border-top: 2px solid var(--custom-accent-color, var(--color-black));
+      padding-top: 1rem;
+    }
+
+    /* --- Formal Template --- */
+    .template-formal {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .template-formal .letter-header h3 {
+       color: var(--custom-heading-color, var(--color-black));
+    }
+    .template-formal .letter-body {
+      flex-grow: 1;
+    }
+    .template-formal .letter-signature {
+      border: none;
+      padding-top: 0;
+    }
+    .template-formal .formal-footer {
+      margin-top: auto; /* Pushes it to the bottom */
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb; /* gray-200 */
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      position: relative;
+      z-index: 1;
+    }
+    .template-formal .formal-footer-contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .template-formal .formal-footer-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .template-formal .formal-footer-item svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      color: var(--custom-accent-color, var(--color-black));
+      flex-shrink: 0;
+    }
+    .template-formal .formal-footer-item div {
+      font-size: 0.8rem;
+      font-family: 'Inter', sans-serif;
+    }
+    .template-formal .formal-footer-item strong {
+      display: block;
+      font-weight: 600;
+      color: #333;
+    }
+    .template-formal .formal-footer-logo-bg {
+        position: absolute;
+        right: -3rem;
+        bottom: -3rem;
+        width: 200px;
+        height: 200px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0.08;
+        z-index: 0;
+        pointer-events: none;
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "rxjs": "https://esm.sh/rxjs@^7.8.2?conditions=es2015",
+    "rxjs/operators": "https://esm.sh/rxjs@^7.8.2/operators?conditions=es2015",
+    "rxjs/ajax": "https://esm.sh/rxjs@^7.8.2/ajax?conditions=es2015",
+    "rxjs/webSocket": "https://esm.sh/rxjs@^7.8.2/webSocket?conditions=es2015",
+    "rxjs/testing": "https://esm.sh/rxjs@^7.8.2/testing?conditions=es2015",
+    "rxjs/fetch": "https://esm.sh/rxjs@^7.8.2/fetch?conditions=es2015",
+    "@google/genai": "https://esm.sh/@google/genai@^1.41.0?external=rxjs",
+    "@angular/platform-browser/animations": "https://esm.sh/@angular/platform-browser@^21.1.4/animations?external=rxjs",
+    "@angular/platform-browser": "https://esm.sh/@angular/platform-browser@^21.1.4?external=rxjs",
+    "@angular/common": "https://esm.sh/@angular/common@^21.1.4?external=rxjs",
+    "@angular/common/http": "https://esm.sh/@angular/common@^21.1.4/http?external=rxjs",
+    "@angular/core": "https://esm.sh/@angular/core@^21.1.4?external=rxjs",
+    "@angular/forms": "https://esm.sh/@angular/forms@^21.1.4?external=rxjs",
+    "@angular/compiler": "https://esm.sh/@angular/compiler@^21.1.4?external=rxjs"
+  }
+}
+</script>
+</head>
+<body class="bg-slate-100">
+  <app-root></app-root>
+</body>
+</html>

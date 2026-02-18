@@ -1,0 +1,140 @@
+
+@let data = letterData();
+
+<div id="letter-preview-content" class="bg-white p-12 shadow-lg w-full max-w-4xl mx-auto text-gray-800 letter-preview min-h-[11in]" 
+  [class.template-classic]="data.template === 'classic'" 
+  [class.template-modern]="data.template === 'modern'" 
+  [class.template-creative]="data.template === 'creative'" 
+  [class.template-regal]="data.template === 'regal'" 
+  [class.template-vibrant]="data.template === 'vibrant'" 
+  [class.template-formal]="data.template === 'formal'"
+  [style.font-family]="data.fontFamily"
+  [style.--custom-heading-color]="data.headingColor"
+  [style.--custom-body-color]="data.bodyColor"
+  [style.--custom-accent-color]="data.accentColor">
+  
+  @if(data.template === 'formal') {
+    <!-- FORMAL TEMPLATE LAYOUT -->
+    <header class="letter-header">
+      <div class="flex justify-between items-start mb-12">
+        @if (data.companyLogo) {
+          <img [src]="data.companyLogo" alt="Company Logo" class="max-h-16 object-contain" [style.order]="data.logoAlignment === 'left' ? 1 : 2">
+        } @else {
+          <div [style.order]="data.logoAlignment === 'left' ? 1 : 2">
+            <h2 class="text-2xl font-bold text-gray-900">{{ data.companyName }}</h2>
+          </div>
+        }
+        <p [style.order]="data.logoAlignment === 'left' ? 2 : 1">{{ formatDate(data.date) }}</p>
+      </div>
+      <h3 class="text-xl font-bold mb-8 text-center underline underline-offset-8">Employment Offer Letter</h3>
+    </header>
+
+    <main class="letter-body">
+      <p class="mb-6">Dear {{ data.candidateName }},</p>
+      <div class="space-y-4 text-base leading-relaxed whitespace-pre-wrap">
+        {{ formattedBody() }}
+      </div>
+      <footer class="mt-12 pt-8 letter-signature">
+        @if(data.signerSignature) {
+          <img [src]="data.signerSignature" alt="Signature" class="max-h-16 mb-2 object-contain" />
+        }
+        <p class="font-bold">{{ data.signerName }}</p>
+        <p class="text-sm text-gray-700">{{ data.signerTitle }}</p>
+        <p class="text-sm text-gray-700">{{ data.companyName }}</p>
+      </footer>
+    </main>
+
+    <footer class="formal-footer">
+        <div class="formal-footer-contact">
+            @if(data.companyEmail) {
+            <div class="formal-footer-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
+                <div>
+                    <strong>Email:</strong>
+                    <span>{{ data.companyEmail }}</span>
+                </div>
+            </div>
+            }
+            @if(data.companyPhone) {
+            <div class="formal-footer-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.211-.998-.552-1.348l-5.116-4.423a1.125 1.125 0 0 0-1.574-.225l-2.25.9c-.527.22-1.134.175-1.593-.116l-4.423-5.116a1.125 1.125 0 0 0-.225-1.574l.9-2.25a1.125 1.125 0 0 0-.116-1.593L5.098 3.448a1.125 1.125 0 0 0-1.348-.552H2.25A2.25 2.25 0 0 0 0 4.5v2.25Z" /></svg>
+                <div>
+                    <strong>Phone:</strong>
+                    <span>{{ data.companyPhone }}</span>
+                </div>
+            </div>
+            }
+            @if(data.companyAddress) {
+            <div class="formal-footer-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>
+                <div>
+                    <strong>Address:</strong>
+                    <span class="whitespace-pre-line">{{ data.companyAddress }}</span>
+                </div>
+            </div>
+            }
+            @if(data.companyWebsite) {
+            <div class="formal-footer-item">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A11.953 11.953 0 0 0 12 13.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 0 3 12c0 .778.099 1.533.284 2.253" /></svg>
+                <div>
+                    <strong>Website:</strong>
+                    <span>{{ data.companyWebsite }}</span>
+                </div>
+            </div>
+            }
+            @if(data.companyLinkedIn) {
+            <div class="formal-footer-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                <div>
+                    <strong>LinkedIn:</strong>
+                    <span>{{ data.companyLinkedIn }}</span>
+                </div>
+            </div>
+            }
+        </div>
+    </footer>
+    @if(data.companyLogo) {
+      <div class="formal-footer-logo-bg" [style.background-image]="'url(' + data.companyLogo + ')'"></div>
+    }
+
+  } @else {
+    <!-- DEFAULT LAYOUT FOR OTHER TEMPLATES -->
+    <header class="letter-header flex justify-between items-start mb-12">
+      <div [style.order]="data.logoAlignment === 'left' ? 2 : 1">
+        <h2 class="text-3xl font-bold text-gray-900" [style.color]="data.headingColor">{{ data.companyName }}</h2>
+        <p class="text-sm text-gray-600 whitespace-pre-line">{{ data.companyAddress }}</p>
+      </div>
+      @if (data.companyLogo) {
+        <img [src]="data.companyLogo" alt="Company Logo" class="max-h-20 max-w-[160px] object-contain" [style.order]="data.logoAlignment === 'left' ? 1 : 2">
+      }
+    </header>
+
+    <main class="letter-body">
+      <p class="mb-8">{{ formatDate(data.date) }}</p>
+      
+      <div class="mb-8">
+        <p class="font-bold">{{ data.candidateName }}</p>
+        @if (data.candidateAddress) {
+          <p class="whitespace-pre-line">{{ data.candidateAddress }}</p>
+        }
+      </div>
+
+      <h3 class="text-xl font-bold mb-4">Re: Offer of {{ data.offerType }}</h3>
+
+      <p class="mb-6">Dear {{ data.candidateName.split(' ')[0] }},</p>
+
+      <div class="space-y-4 text-base leading-relaxed whitespace-pre-wrap">
+        {{ formattedBody() }}
+      </div>
+
+      <footer class="mt-12 pt-8 letter-signature">
+        @if(data.signerSignature) {
+          <img [src]="data.signerSignature" alt="Signature" class="max-h-16 mb-2 object-contain" />
+        }
+        <p class="font-bold">{{ data.signerName }}</p>
+        <p class="text-sm text-gray-700">{{ data.signerTitle }}</p>
+        <p class="text-sm text-gray-700">{{ data.companyName }}</p>
+      </footer>
+    </main>
+  }
+</div>
