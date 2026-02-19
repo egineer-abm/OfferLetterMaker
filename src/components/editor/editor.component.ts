@@ -263,6 +263,26 @@ export class EditorComponent implements OnInit, AfterViewInit {
       html2pdf().from(element).set(opt).save();
     }
   }
+
+  private async imageUrlToBase64(url: string): Promise<string> {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    } catch (error) {
+        console.error(`Failed to convert image URL to base64: ${url}`, error);
+        // Fallback to original URL if conversion fails for any reason (e.g., CORS, network error)
+        return url;
+    }
+  }
   
   async exportToDocx(): Promise<void> {
     const element = document.getElementById('letter-preview-content');
@@ -279,116 +299,42 @@ export class EditorComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const styles = `
-      body { font-family: 'Inter', sans-serif; box-sizing: border-box; }
-      .letter-preview {
-          color: var(--custom-body-color, #1D1D1D);
-      }
-      :root {
-          --color-green: #07F57B;
-          --color-blue: #2D3C77;
-          --color-black: #1D1D1D;
-          --color-yellow: #FCD202;
-          --color-ceramic: #A6C5E2;
-      }
-      .template-modern .letter-header {
-          border-left: 8px solid var(--custom-accent-color, var(--color-blue));
-          padding-left: 2rem; padding-top: 1rem; padding-bottom: 1rem;
-          display: flex; justify-content: space-between; align-items: flex-start;
-          margin-bottom: 3rem; background-color: #f0f5fa;
-      }
-      .template-modern .letter-header h2 { color: var(--custom-heading-color, var(--color-blue)); font-size: 2.25rem; }
-      .template-modern h3 { color: var(--custom-heading-color, var(--color-blue)); }
-      .template-modern .letter-signature { border-top: 2px solid var(--custom-accent-color, var(--color-blue)); padding-top: 1rem; }
-
-      .template-creative .letter-header {
-          position: relative; background-color: var(--custom-accent-color, var(--color-black));
-          color: white; padding: 2.5rem; margin-bottom: 3rem; border-radius: 0.5rem;
-      }
-      .template-creative .letter-header h2 { color: var(--color-green); font-size: 2rem; font-weight: 700; }
-      .template-creative .letter-header p { color: var(--color-ceramic); }
-      .template-creative h3 {
-          color: var(--custom-heading-color, var(--color-black));
-          border-bottom: 3px solid var(--custom-accent-color, var(--color-yellow));
-          padding-bottom: 0.5rem; display: inline-block;
-      }
-      .template-creative .letter-signature { border-top: 2px solid var(--custom-accent-color, var(--color-green)); padding-top: 1rem; }
-
-      .template-regal .letter-header {
-          background-color: var(--custom-accent-color, var(--color-blue)); color: white;
-          padding: 2rem; margin: 0 0 3rem 0; border-bottom: 4px solid var(--color-yellow);
-      }
-      .template-regal .letter-header h2 { color: var(--custom-heading-color, white); }
-      .template-regal .letter-header p { color: var(--color-ceramic); }
-      .template-regal h3 { color: var(--custom-heading-color, var(--color-blue)); font-weight: 700; }
-      .template-regal .letter-signature { border-top: 1px solid var(--color-ceramic); margin-top: 2rem; padding-top: 1rem; }
-
-      .template-vibrant { position: relative; }
-      .template-vibrant .letter-header { border-top: 8px solid var(--custom-accent-color, var(--color-green)); padding-top: 1.5rem; }
-      .template-vibrant .letter-header h2 { color: var(--custom-heading-color, var(--color-black)); font-size: 2.5rem; }
-      .template-vibrant h3 { color: var(--custom-heading-color, var(--color-black)); }
-      .template-vibrant .letter-signature { border-top: 2px solid var(--custom-accent-color, var(--color-black)); padding-top: 1rem; }
-
-      .template-formal { display: flex; flex-direction: column; position: relative; }
-      .template-formal .letter-header h3 { color: var(--custom-heading-color, var(--color-black)); }
-      .template-formal .letter-body { flex-grow: 1; }
-      .template-formal .letter-signature { border: none; padding-top: 0; }
-      .template-formal .formal-footer {
-          padding-top: 1.5rem; border-top: 1px solid #e5e7eb;
-          display: flex; justify-content: space-between; align-items: flex-end;
-      }
-      .template-formal .formal-footer-contact { display: flex; flex-wrap: wrap; gap: 1.5rem; }
-      .template-formal .formal-footer-item { display: flex; align-items: center; gap: 0.5rem; }
-      .template-formal .formal-footer-item svg { width: 1.25rem; height: 1.25rem; color: var(--custom-accent-color, var(--color-black)); flex-shrink: 0; }
-      .template-formal .formal-footer-item div { font-size: 0.8rem; font-family: 'Inter', sans-serif; }
-      .template-formal .formal-footer-item strong { display: block; font-weight: 600; color: #333; }
-
-      .template-tech { display: flex; padding: 0; }
-      .template-tech .tech-sidebar {
-          background-color: var(--custom-accent-color, var(--color-blue)); color: white; width: 250px;
-          padding: 2.5rem; display: flex; flex-direction: column; align-items: center; text-align: center;
-      }
-      .template-tech .tech-sidebar .company-logo {
-          max-width: 120px; max-height: 120px; background-color: white;
-          border-radius: 0.5rem; padding: 0.5rem; margin-bottom: 1rem;
-      }
-      .template-tech .tech-sidebar .company-name { font-size: 1.5rem; font-weight: 700; color: white; }
-      .template-tech .tech-content { flex-grow: 1; padding: 3rem; }
-      .template-tech .tech-content h3 { color: var(--color-green); }
-      .template-tech .tech-content .letter-signature { border-top: 2px solid var(--color-green); margin-top: 2rem; padding-top: 1rem; }
-
-      .template-corporate { padding: 0; }
-      .template-corporate .corporate-header {
-          background-color: var(--custom-accent-color, var(--color-black)); color: white;
-          padding: 2rem 3rem; text-align: center; border-bottom: 5px solid var(--color-yellow);
-      }
-      .template-corporate .corporate-header .company-name { font-size: 2.5rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
-      .template-corporate .corporate-content { padding: 3rem; }
-      .template-corporate .corporate-content h3 {
-          text-transform: uppercase; letter-spacing: 0.05em; color: var(--custom-heading-color, var(--color-black));
-          border-bottom: 1px solid var(--color-ceramic); padding-bottom: 0.5rem;
-      }
-      .template-corporate .letter-signature { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-ceramic); }
-      .template-corporate .corporate-footer {
-          background-color: #f8f9fa; padding: 1.5rem 3rem; border-top: 1px solid #e5e7eb;
-          text-align: center; font-size: 0.8rem; color: #6c757d;
-      }
-      /* Generic helpers that might be used across templates */
-      .flex { display: flex; }
-      .justify-between { justify-content: space-between; }
-      .items-start { align-items: flex-start; }
-      .text-right { text-align: right; }
-      .mb-12 { margin-bottom: 3rem; }
-      .text-2xl { font-size: 1.5rem; }
-      .font-bold { font-weight: 700; }
-      .text-gray-900 { color: #111827; }
-      .whitespace-pre-line { white-space: pre-line; }
-    `;
-
-    // Cloned node to avoid showing removed elements in the preview
+    // Clone the node to modify it for export without affecting the on-screen preview.
     const contentNode = element.cloneNode(true) as HTMLElement;
-    // Remove drag handles from cloned node before export
+
+    // Remove UI-only elements like drag handles.
     contentNode.querySelectorAll('.drag-handle').forEach(el => el.remove());
+
+    // --- Accurate Image Embedding ---
+    // Find all images and convert their URLs to base64 data to ensure they are
+    // properly embedded in the final DOCX file, preventing broken image links.
+    const images = Array.from(contentNode.querySelectorAll('img'));
+    const imagePromises = images.map(async (img) => {
+      // Only convert external URLs, not already-base64-encoded (data:...) images.
+      if (img.src && img.src.startsWith('http')) {
+        img.src = await this.imageUrlToBase64(img.src);
+      }
+    });
+
+    // Wait for all images to be converted before proceeding.
+    await Promise.all(imagePromises);
+
+    // --- Accurate Style Extraction ---
+    // Dynamically get all CSS rules from loaded stylesheets for a perfect style match.
+    // This is more robust than a hardcoded style string.
+    let styles = '';
+    const styleSheets = Array.from(document.styleSheets);
+    styleSheets.forEach((sheet) => {
+      try {
+        if (sheet.cssRules) {
+          styles += Array.from(sheet.cssRules)
+            .map((rule) => rule.cssText)
+            .join('\n');
+        }
+      } catch (e) {
+        console.warn('Could not read CSS rules from stylesheet (this is expected for external stylesheets and can be ignored):', sheet.href, e);
+      }
+    });
 
     const htmlString = `<!DOCTYPE html>
       <html lang="en">

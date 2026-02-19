@@ -8,7 +8,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="https://unpkg.com/html-to-docx@1.8.0/dist/html-to-docx.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html-to-docx@1.8.0/dist/html-to-docx.js" integrity="sha384-8r2kT07t2uGAN54XvjGgVCeH58dlgJ2sS4ocVvPkyii76j01pKIzGf0sCQILD3s3" crossorigin="anonymous"></script>
   <style>
     /* Add a professional font for the letter preview */
     @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Lato:wght@400;700&family=Roboto+Slab:wght@400;700&family=Montserrat:wght@400;600;700&display=swap');
@@ -348,10 +348,14 @@
     "@angular/core": "https://esm.sh/@angular/core@^21.1.4?external=rxjs",
     "@angular/forms": "https://esm.sh/@angular/forms@^21.1.4?external=rxjs",
     "@angular/compiler": "https://esm.sh/@angular/compiler@^21.1.4?external=rxjs",
-    "@angular/cdk/drag-drop": "https://esm.sh/@angular/cdk@18.0.5/drag-drop?external=rxjs,@angular/core,@angular/common,@angular/platform-browser"
+    "@angular/cdk/drag-drop": "https://esm.sh/@angular/cdk@18.0.5/drag-drop?external=rxjs,@angular/core,@angular/common,@angular/platform-browser",
+    "@angular/common/": "https://esm.sh/@angular/common@^21.1.5/",
+    "@angular/platform-browser/": "https://esm.sh/@angular/platform-browser@^21.1.5/",
+    "@angular/cdk/": "https://esm.sh/@angular/cdk@^21.1.5/"
   }
 }
 </script>
+<link rel="stylesheet" href="/index.css">
 </head>
 <body class="bg-slate-100">
   <app-root></app-root>
